@@ -23,10 +23,9 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - uses: android-actions/setup-android@v3
-
       - name: Installer et synchroniser
         run: |
+          echo "sdk.dir=$ANDROID_HOME" > android/local.properties
           npm ci
           npx cap sync android
 
