@@ -33,7 +33,15 @@ jobs:
         working-directory: android
         run: |
           chmod +x gradlew
-          ./gradlew assembleRelease --no-daemon
+          set +e
+          ./gradlew assembleRelease --no-daemon --stacktrace > ../build.log 2>&1
+          code=$?
+          set -e
+          if [ $code -ne 0 ]; then
+            msg=$( (grep -A25 "What went wrong" ../build.log || tail -40 ../build.log) | head -40 | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}')
+            echo "::error title=Gradle::$msg"
+            exit $code
+          fi
           cp app/build/outputs/apk/release/app-release.apk ../MonProgFoot.apk
 
       - name: Publier l'APK
