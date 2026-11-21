@@ -23,6 +23,9 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      - name: Vérifier les classements
+        run: node scripts/check-standings.js
+
       - name: Installer et synchroniser
         run: |
           echo "sdk.dir=$ANDROID_HOME" > android/local.properties
